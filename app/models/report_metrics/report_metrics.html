@@ -1,0 +1,95 @@
+
+        <!DOCTYPE html>
+        <html>
+            <head>
+                
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                font-size: 16px;
+                line-height: 1.5;
+            }
+
+            h1, h2 {
+                margin-top: 40px;
+                margin-bottom: 20px;
+            }
+
+            table {
+                border-collapse: collapse;
+                margin-bottom: 40px;
+            }
+
+            th, td {
+                border: 1px solid #ccc;
+                padding: 8px;
+            }
+
+            th {
+                background-color: #f2f2f2;
+            }
+
+            img {
+                max-width: 100%;
+                height: auto;
+            }
+        </style>
+        
+            </head>
+            <body>
+                <h1>Metrics Report</h1>
+                <h4>Type: classification</h4>
+                <h2>Data info</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Info</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Count of samples</td><td>143</td></tr>
+<tr><td>Count True class</td><td>89</td></tr>
+<tr><td>Count False class</td><td>54</td></tr>
+<tr><td>Class balance %</td><td>62.2</td></tr>
+
+                    </tbody>
+                </table>
+                <h2>Metrics</h2>
+                <p><b>threshold: 0.5</b></p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>AUC</td><td>0.9967</td></tr>
+<tr><td>Log Loss</td><td>0.0718</td></tr>
+<tr><td>Average_Precision</td><td>0.9979</td></tr>
+<tr><td>Accuracy</td><td>0.972</td></tr>
+<tr><td>Precision</td><td>0.9722</td></tr>
+<tr><td>Recall</td><td>0.972</td></tr>
+<tr><td>F1 Score</td><td>0.9719</td></tr>
+<tr><td>MCC</td><td>0.9405</td></tr>
+<tr><td>TN</td><td>51</td></tr>
+<tr><td>FP</td><td>3</td></tr>
+<tr><td>FN</td><td>1</td></tr>
+<tr><td>TP</td><td>88</td></tr>
+
+                    </tbody>
+                </table>
+                <h2>Plots</h2>
+                <img src="./plots/confusion_matrix.png"></br>
+<img src="./plots/calibration_curve.png"></br>
+<img src="./plots/precision_recall_curve.png"></br>
+<img src="./plots/class_distribution.png"></br>
+<img src="./plots/lift_curve.png"></br>
+<img src="./plots/roc_curve.png"></br>
+<img src="./plots/ks_statistic.png"></br>
+<img src="./plots/cumulative_gain.png"></br>
+
+            </body>
+        </html>
+        
