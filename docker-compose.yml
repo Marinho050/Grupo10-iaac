@@ -1,0 +1,11 @@
+version: '3'
+services:
+  ml_fastapi:
+    build: .
+    restart : always
+    volumes:
+    - ./app:/app
+    working_dir: /app/
+    ports:
+      - "8003:8003"
+    command: python -u ./main.py
