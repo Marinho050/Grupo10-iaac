@@ -3,15 +3,13 @@ from fastapi import FastAPI, HTTPException, status
 from fastapi.responses import RedirectResponse
 import uuid
 import pandas as pd
-import numpy as np
-from typing import Union
 from pydantic import BaseModel, Field
 import uvicorn
 from loguru import logger
 import sys
-from catboost import CatBoostClassifier
+import joblib
 import yaml
-
+import os
 
 ####################################### logger #################################
 
@@ -29,91 +27,74 @@ logger.add(
 ####################################### SETUP #################################
 
 ####### LOAD CONFIG ##################################
-with open("config_prod.yml", 'r') as ymlfile:
+CONFIG_PATH = os.path.join(os.path.dirname(__file__), "config_prod.yml")
+with open(CONFIG_PATH, "r") as ymlfile:
     config = yaml.load(ymlfile, Loader=yaml.SafeLoader)
 
-MODEL_DIR = config['MODEL_DIR']
-VERSION = config['VERSION']
-
+MODEL_DIR = config["MODEL_DIR"]
+VERSION = config["VERSION"]
 
 ####################### Models ###########################################
-# MODEL
-model = CatBoostClassifier()      # parameters not required.
-model.load_model(f'{MODEL_DIR}catboost_model_{VERSION}.cbm')
+# Deteção de conexões maliciosas — pipeline scikit-learn (pré-processamento + Random Forest)
+# treinado em notebooks/Modelling_cybersecurity.ipynb.
+bundle = joblib.load(os.path.join(MODEL_DIR, "model_final.joblib"))
+pipeline = bundle["pipeline"]
+THRESHOLD = bundle["threshold"]
 
 ###############################################################################
 # FastAPI
 
 app = FastAPI(
-    title="Sample API for ML Model Serving",
+    title="Deteção de Conexões Maliciosas — IAAC Grupo 10",
     version=VERSION,
-    description="Based on ML with FastAPI Serving ⚡",
+    description="API de deteção de conexões de rede maliciosas, a partir de features tipo NetFlow ⚡",
 )
 
+
 class PredictionInput(BaseModel):
-    mean_radius: float
-    mean_texture: float
-    mean_perimeter: float
-    mean_area: float
-    mean_smoothness: float
-    mean_compactness: float
-    mean_concavity: float
-    mean_concave_points: float
-    mean_symmetry: float
-    mean_fractal_dimension: float
-    radius_error: float
-    texture_error: float
-    perimeter_error: float
-    area_error: float
-    smoothness_error: float
-    compactness_error: float
-    concavity_error: float
-    concave_points_error: float
-    symmetry_error: float
-    fractal_dimension_error: float
-    worst_radius: float
-    worst_texture: float
-    worst_perimeter: float
-    worst_area: float
-    worst_smoothness: float
-    worst_compactness: float
-    worst_concavity: float
-    worst_concave_points: float
-    worst_symmetry: float
-    worst_fractal_dimension: float
+    Protocol: str = Field(..., examples=["TCP"], description="Protocolo de rede: TCP, UDP ou ICMP")
+    Packet_Size_Bytes: float = Field(..., ge=0, examples=[805])
+    Connection_Duration_ms: float = Field(..., ge=0, examples=[120])
+    Failed_Logins: int = Field(..., ge=0, examples=[0])
+    Geo_Distance_km: float = Field(..., ge=0, examples=[1169])
 
 
 class ResponseModel(BaseModel):
     prediction_Id: str
     predict: int
-    predict_prob: Union[float, None]
+    predict_prob: float
+    threshold: float
+
 
 ############################# Requests ##########################################################
 
 @app.post("/predict", response_model=ResponseModel, status_code=status.HTTP_200_OK)
 async def prediction(input: PredictionInput):
-    """Predicts the class and probability of the input data.
+    """Classifica uma conexão de rede como maliciosa (1) ou benigna (0).
 
     Args:
-        input (PredictionInput): Input data.
+        input (PredictionInput): Features da conexão (Protocol, Packet_Size_Bytes,
+            Connection_Duration_ms, Failed_Logins, Geo_Distance_km).
 
     Returns:
-        dict: Predicted class and probability.
+        dict: Classe prevista, probabilidade de ser maliciosa e o threshold usado.
     """
     result = {
         "prediction_Id": str(uuid.uuid4()),
         "predict": 0,
         "predict_prob": 0.0,
-        }
-    
+        "threshold": THRESHOLD,
+    }
+
     logger.info(input.dict())
 
-    # convert input to numpy array and select features
-    input_data = np.array([input.dict()[feature] for feature in model.feature_names_])
+    row = pd.DataFrame([input.dict()])
+    # mesma feature engineering do notebook de Data Preparation
+    row["High_Failed_Logins"] = (row["Failed_Logins"] >= 3).astype(int)
 
-    # predict class and probability
-    result['predict'] = model.predict(input_data).item()
-    result['predict_prob'] = model.predict_proba(input_data)[1]
+    proba = float(pipeline.predict_proba(row)[0, 1])
+    result["predict_prob"] = proba
+    result["predict"] = int(proba >= THRESHOLD)
 
     logger.info(result)
     return result
@@ -124,7 +105,7 @@ async def redirect():
     return RedirectResponse("/docs")
 
 
-@app.get('/health')
+@app.get("/health")
 async def service_health():
     """Return service health"""
     return {"ok"}
@@ -135,4 +116,4 @@ async def service_health():
 
 if __name__ == "__main__":
     ######################## START ###########################################
-    uvicorn.run(app, host=config['HOST'], port=config['PORT'])
+    uvicorn.run(app, host=config["HOST"], port=config["PORT"])
