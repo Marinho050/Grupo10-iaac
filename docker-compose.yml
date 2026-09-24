@@ -1,10 +1,11 @@
 version: '3'
 services:
-  ml_fastapi:
+  malicious-connection-api:
     build: .
-    restart : always
+    restart: always
     volumes:
-    - ./app:/app
+      - ./app:/app
+      - ./models:/models
     working_dir: /app/
     ports:
       - "8003:8003"
