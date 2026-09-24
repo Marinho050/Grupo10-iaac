@@ -91,9 +91,9 @@ async def prediction(input: PredictionInput):
         "threshold": THRESHOLD,
     }
 
-    logger.info(input.dict())
+    logger.info(input.model_dump())
 
-    row = pd.DataFrame([input.dict()])
+    row = pd.DataFrame([input.model_dump()])
     # mesma feature engineering do notebook de Data Preparation
     row["High_Failed_Logins"] = (row["Failed_Logins"] >= 3).astype(int)
 
