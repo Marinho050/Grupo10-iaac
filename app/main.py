@@ -31,8 +31,13 @@ CONFIG_PATH = os.path.join(os.path.dirname(__file__), "config_prod.yml")
 with open(CONFIG_PATH, "r") as ymlfile:
     config = yaml.load(ymlfile, Loader=yaml.SafeLoader)
 
-MODEL_DIR = config["MODEL_DIR"]
 VERSION = config["VERSION"]
+
+# MODEL_DIR no config_prod.yml é relativo à pasta app/ (ex: '../models/'), não à pasta
+# a partir de onde o processo é lançado — resolvemos sempre a partir da localização
+# deste ficheiro, para funcionar tanto com "python app/main.py" como com pytest a
+# partir da raiz do projeto.
+MODEL_DIR = os.path.normpath(os.path.join(os.path.dirname(__file__), config["MODEL_DIR"]))
 
 ####################### Models ###########################################
 # Deteção de conexões maliciosas — pipeline scikit-learn (pré-processamento + Random Forest)
