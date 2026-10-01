@@ -1,138 +1,42 @@
-####################################### IMPORT #################################
-from fastapi import FastAPI, HTTPException, status
-from fastapi.responses import RedirectResponse
 import uuid
+import joblib
 import pandas as pd
-import numpy as np
-from typing import Union
-from pydantic import BaseModel, Field
-import uvicorn
-from loguru import logger
-import sys
-from catboost import CatBoostClassifier
-import yaml
+from fastapi import FastAPI
+from pydantic import BaseModel
 
+# Inicializar a aplicação FastAPI
+app = FastAPI(title="Phishing Detection API", version="1.0")
 
-####################################### logger #################################
+# Carregar o modelo treinado de Random Forest
+# (Garante que o ficheiro .pkl está acessível no diretório correto)
+model = joblib.load('random_forest_phishing.pkl')
 
-logger.remove()
-logger.add(
-    sys.stderr,
-    colorize=True,
-    format="<green>{time:HH:mm:ss}</green> | <level>{message}</level>",
-    level=10,
-)
-logger.add(
-    "log.log", rotation="1 MB", level="DEBUG", compression="zip"
-)
+# Definir a estrutura dos dados de entrada baseada nas caraterísticas reais do e-mail
+class EmailInput(BaseModel):
+    has_link: int
+    has_attachment: int
+    urgency_score: int
+    spelling_errors: int
+    email_length_words: int
 
-####################################### SETUP #################################
+@app.get("/")
+def home():
+    return {"message": "API de Deteção de Phishing a funcionar com sucesso!"}
 
-####### LOAD CONFIG ##################################
-with open("config_prod.yml", 'r') as ymlfile:
-    config = yaml.load(ymlfile, Loader=yaml.SafeLoader)
-
-MODEL_DIR = config['MODEL_DIR']
-VERSION = config['VERSION']
-
-
-####################### Models ###########################################
-# MODEL
-model = CatBoostClassifier()      # parameters not required.
-model.load_model(f'{MODEL_DIR}catboost_model_{VERSION}.cbm')
-
-###############################################################################
-# FastAPI
-
-app = FastAPI(
-    title="Sample API for ML Model Serving",
-    version=VERSION,
-    description="Based on ML with FastAPI Serving ⚡",
-)
-
-class PredictionInput(BaseModel):
-    mean_radius: float
-    mean_texture: float
-    mean_perimeter: float
-    mean_area: float
-    mean_smoothness: float
-    mean_compactness: float
-    mean_concavity: float
-    mean_concave_points: float
-    mean_symmetry: float
-    mean_fractal_dimension: float
-    radius_error: float
-    texture_error: float
-    perimeter_error: float
-    area_error: float
-    smoothness_error: float
-    compactness_error: float
-    concavity_error: float
-    concave_points_error: float
-    symmetry_error: float
-    fractal_dimension_error: float
-    worst_radius: float
-    worst_texture: float
-    worst_perimeter: float
-    worst_area: float
-    worst_smoothness: float
-    worst_compactness: float
-    worst_concavity: float
-    worst_concave_points: float
-    worst_symmetry: float
-    worst_fractal_dimension: float
-
-
-class ResponseModel(BaseModel):
-    prediction_Id: str
-    predict: int
-    predict_prob: Union[float, None]
-
-############################# Requests ##########################################################
-
-@app.post("/predict", response_model=ResponseModel, status_code=status.HTTP_200_OK)
-async def prediction(input: PredictionInput):
-    """Predicts the class and probability of the input data.
-
-    Args:
-        input (PredictionInput): Input data.
-
-    Returns:
-        dict: Predicted class and probability.
-    """
-    result = {
-        "prediction_Id": str(uuid.uuid4()),
-        "predict": 0,
-        "predict_prob": 0.0,
-        }
+@app.post("/predict")
+def predict(data: EmailInput):
+    # Converter os dados recebidos para um DataFrame do Pandas
+    input_data = pd.DataFrame([data.dict()])
     
-    logger.info(input.dict())
-
-    # convert input to numpy array and select features
-    input_data = np.array([input.dict()[feature] for feature in model.feature_names_])
-
-    # predict class and probability
-    result['predict'] = model.predict(input_data).item()
-    result['predict_prob'] = model.predict_proba(input_data)[1]
-
-    logger.info(result)
-    return result
-
-
-@app.get("/", include_in_schema=False)
-async def redirect():
-    return RedirectResponse("/docs")
-
-
-@app.get('/health')
-async def service_health():
-    """Return service health"""
-    return {"ok"}
-
-
-########################## MAIN ###########################################################
-###########################################################################################
-
-if __name__ == "__main__":
-    ######################## START ###########################################
-    uvicorn.run(app, host=config['HOST'], port=config['PORT'])
+    # Executar a previsão e calcular a probabilidade
+    prediction = int(model.predict(input_data)[0])
+    prediction_prob = float(model.predict_proba(input_data)[0][1])
+    
+    # Gerar um ID único para o registo da predição
+    prediction_id = str(uuid.uuid4())
+    
+    return {
+        "prediction_Id": prediction_id,
+        "predict": prediction,
+        "predict_prob": prediction_prob
+    }
