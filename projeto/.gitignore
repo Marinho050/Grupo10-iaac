@@ -7,3 +7,6 @@ data/*.pkl
 outputs/
 reports/predictions_*.csv
 *.log
+models/llm/
+.hf_cache/
+.jupyter/
