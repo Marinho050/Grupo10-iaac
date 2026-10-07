@@ -11,5 +11,5 @@
   "cli": "5 fluxos sem Class pontuados; 1 alerta para revisão.",
   "dependencias": "pip check sem conflitos. Locks separados para API e LLM.",
   "docker": "Não executado: Docker não instalado.",
-  "ci_github": "Configurada; confirmar execução após push."
+  "ci_github": "Aprovada na versão de código e3d4823; run 37637195526."
 }

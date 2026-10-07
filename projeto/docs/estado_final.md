@@ -26,4 +26,4 @@ A auditoria encontrou 650 grupos de features idênticas com classes distintas, e
 6. Construir a imagem Docker numa máquina com Docker, se essa forma de deployment for escolhida. A API local foi efetivamente executada; não houve deployment público.
 7. Para uso operacional, recolher dados recentes com ambas as classes, definir uma nova reserva, cumprir as metas e confirmar capacidade/custos do SOC.
 
-A CI está configurada para a componente projeto. O seu estado remoto deve ser consultado no GitHub após a publicação dos commits. Não é apresentada como aprovada sem execução confirmada.
+A CI do GitHub foi executada e aprovada na versão de código e3d4823, run 37637195526. Instalou as dependências em Ubuntu, executou os testes centrais e validou a CLI. Evidência em reports/ci_github.json. O histórico da branch Márcio contém os commits de implementação, modelos, agentes, documentação e confirmação desta validação.
