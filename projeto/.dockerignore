@@ -1,0 +1,8 @@
+.venv
+data
+outputs
+reports
+notebooks
+__pycache__
+.git
+models/llm
