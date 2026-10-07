@@ -24,12 +24,20 @@ def analisar(path=ROOT/'data/Trojan_Detection.csv'):
     signatures=[c for c in raw if c not in ['Class','Timestamp','Unnamed: 0']]
     stats=raw.groupby(signatures,dropna=False,sort=False).Class.agg(['nunique','size'])
     conflicting=stats[stats['nunique']>1]
+    engineered=FlowFeatures().fit_transform(raw)
+    feature_keys=pd.util.hash_pandas_object(engineered,index=False)
+    model_groups=pd.DataFrame({'assinatura':feature_keys,'y':y}).groupby('assinatura').y.agg(['size','nunique','sum'])
+    feature_conflicts=model_groups[model_groups['nunique']>1]
+    empirical_ceiling=float(np.maximum(model_groups['sum'],model_groups['size']-model_groups['sum']).sum()/len(raw))
     quality={'linhas':len(raw),'colunas':len(raw.columns),'classes':raw.Class.value_counts().to_dict(),
              'valores_em_falta':int(raw.isna().sum().sum()),'valores_infinitos':int(np.isinf(numeric.to_numpy()).sum()),
              'duplicados_sem_indice':int(raw.drop(columns=['Unnamed: 0'],errors='ignore').duplicated().sum()),
              'colunas_constantes':raw.columns[raw.nunique(dropna=False)==1].tolist(),
              'grupos_assinatura_com_rotulos_distintos':len(conflicting),'linhas_nesses_grupos':int(conflicting['size'].sum()),
              'definicao_assinatura':'Todas as colunas exceto Class, Timestamp e índice. Repetição de tráfego não prova erro de rótulo.',
+             'grupos_features_com_rotulos_distintos':len(feature_conflicts),'linhas_nesses_grupos_features':int(feature_conflicts['size'].sum()),
+             'teto_exatidao_empirico_features_identicas':empirical_ceiling,
+             'nota_assinatura_features':'Hash das estatísticas transformadas sem IPs e Timestamp. Contextos distintos podem ter features idênticas; teto descritivo deste ficheiro, não limite populacional.',
              'dias':len(temporal),'inicio':meta.dia.min(),'fim':meta.dia.max(),
              'temporal_viavel_para_fpr':False,'motivo_temporal':'Dias recentes contêm apenas Trojan; sem negativos, FPR e ROC AUC não são estimáveis.',
              'sha256':hashlib.sha256(Path(path).read_bytes()).hexdigest()}

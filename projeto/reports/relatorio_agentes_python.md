@@ -15,6 +15,8 @@ Factos calculados pelo classificador, sem interpretação do LLM:
 
 ## Comentário gerado automaticamente
 
-Este alerta requer revisão humana para garantir que os dados estão atualizados e que o modelo está em conformidade com as normas de segurança. Não é necessário bloquear automaticamente, pois o modelo está pronto para produção.
+Comentário neural rejeitado pelo controlo de conteúdo. Consulte os factos calculados.
+
+O modelo não está aprovado para produção.
 
 Este comentário requer revisão humana e não substitui as métricas, o relatório académico nem uma decisão operacional.
