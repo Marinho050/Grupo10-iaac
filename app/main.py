@@ -1,5 +1,5 @@
 ####################################### IMPORT #################################
-from fastapi import FastAPI, HTTPException, status
+from fastapi import FastAPI, status
 from fastapi.responses import RedirectResponse
 import uuid
 import pandas as pd
@@ -41,7 +41,7 @@ MODEL_DIR = os.path.normpath(os.path.join(os.path.dirname(__file__), config["MOD
 
 ####################### Models ###########################################
 # Deteção de conexões maliciosas — pipeline scikit-learn (pré-processamento + Random Forest)
-# treinado em notebooks/Modelling_cybersecurity.ipynb.
+# treinado em notebooks/Modelling_cybersecurity.ipynb (ou src/data_modeling.py).
 bundle = joblib.load(os.path.join(MODEL_DIR, "model_final.joblib"))
 pipeline = bundle["pipeline"]
 THRESHOLD = bundle["threshold"]
@@ -71,35 +71,36 @@ class ResponseModel(BaseModel):
     threshold: float
 
 
+class HealthResponse(BaseModel):
+    status: str
+
+
 ############################# Requests ##########################################################
 
 @app.post("/predict", response_model=ResponseModel, status_code=status.HTTP_200_OK)
-async def prediction(input: PredictionInput):
+async def prediction(payload: PredictionInput):
     """Classifica uma conexão de rede como maliciosa (1) ou benigna (0).
 
     Args:
-        input (PredictionInput): Features da conexão (Protocol, Packet_Size_Bytes,
+        payload (PredictionInput): Features da conexão (Protocol, Packet_Size_Bytes,
             Connection_Duration_ms, Failed_Logins, Geo_Distance_km).
 
     Returns:
         dict: Classe prevista, probabilidade de ser maliciosa e o threshold usado.
     """
-    result = {
-        "prediction_Id": str(uuid.uuid4()),
-        "predict": 0,
-        "predict_prob": 0.0,
-        "threshold": THRESHOLD,
-    }
+    logger.info(payload.model_dump())
 
-    logger.info(input.model_dump())
-
-    row = pd.DataFrame([input.model_dump()])
-    # mesma feature engineering do notebook de Data Preparation
+    row = pd.DataFrame([payload.model_dump()])
+    # mesma feature engineering do notebook/script de Data Preparation
     row["High_Failed_Logins"] = (row["Failed_Logins"] >= 3).astype(int)
 
     proba = float(pipeline.predict_proba(row)[0, 1])
-    result["predict_prob"] = proba
-    result["predict"] = int(proba >= THRESHOLD)
+    result = {
+        "prediction_Id": str(uuid.uuid4()),
+        "predict": int(proba >= THRESHOLD),
+        "predict_prob": proba,
+        "threshold": THRESHOLD,
+    }
 
     logger.info(result)
     return result
@@ -110,10 +111,10 @@ async def redirect():
     return RedirectResponse("/docs")
 
 
-@app.get("/health")
+@app.get("/health", response_model=HealthResponse)
 async def service_health():
-    """Return service health"""
-    return {"ok"}
+    """Return service health."""
+    return {"status": "ok"}
 
 
 ########################## MAIN ###########################################################

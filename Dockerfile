@@ -1,11 +1,15 @@
-#FROM tiangolo/uvicorn-gunicorn-fastapi:python3.10
-FROM python:3.10-buster
+FROM python:3.11-slim
 
-RUN pip install --upgrade pip
+WORKDIR /app
+
+RUN pip install --no-cache-dir --upgrade pip
 
 COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
 
-RUN pip install -r requirements.txt
-#RUN pip install --no-cache-dir --upgrade -r requirements.txt
+COPY app/ ./
+COPY models/ /models/
 
-RUN mkdir app
+EXPOSE 8003
+
+CMD ["python", "main.py"]
