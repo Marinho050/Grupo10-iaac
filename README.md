@@ -1,3 +1,9 @@
+# Grupo 10 IAAC
+
+O projeto de deteção de trojans da branch Márcio está em [projeto/](projeto/README.md).
+
+A secção seguinte preserva a documentação do exemplo FastAPI importado.
+
 # Sample FastAPI for ML Model Serving
 
 > Código base importado de [Alex-Lekov/ml-fastapi](https://github.com/Alex-Lekov/ml-fastapi).

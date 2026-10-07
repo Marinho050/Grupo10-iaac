@@ -1,0 +1,6 @@
+{"version":"2.0.0","tasks":[
+{"label":"1 Analisar dados","type":"process","command":"${workspaceFolder}/.venv/Scripts/python.exe","args":["-m","src.eda"],"problemMatcher":[]},
+{"label":"2 Treinar e avaliar","type":"process","command":"${workspaceFolder}/.venv/Scripts/python.exe","args":["-m","src.modelacao"],"problemMatcher":[]},
+{"label":"3 Testar","type":"process","command":"${workspaceFolder}/.venv/Scripts/python.exe","args":["-m","pytest","-q"],"problemMatcher":[]},
+{"label":"4 Abrir API local","type":"process","command":"${workspaceFolder}/.venv/Scripts/python.exe","args":["-m","uvicorn","api:app","--host","127.0.0.1","--port","8000"],"problemMatcher":[]}
+]}
