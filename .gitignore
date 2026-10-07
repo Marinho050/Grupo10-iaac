@@ -127,4 +127,33 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# ---------------------------------------------------------------------------
+# Específico do projeto (Grupo 10 — IAAC)
+# ---------------------------------------------------------------------------
+
+# Sistema operativo
 .DS_Store
+Thumbs.db
+desktop.ini
+
+# IDEs / editores
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Logs da API (FastAPI/loguru) — já cobertos por "*.log", explícitos por clareza
+log.log
+log.*.log*
+*.log.zip
+
+# Ficheiros temporários
+*.tmp
+*.bak
+*~
+
+# Dados intermédios/gerados pelo pipeline de Data Preparation
+# (datasets/Raw/ mantém-se versionado; datasets/Process/ é regenerado pelo código)
+datasets/Process/*
+!datasets/Process/.gitkeep
