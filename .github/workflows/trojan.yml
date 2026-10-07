@@ -1,0 +1,22 @@
+name: Trojan pipeline
+on:
+  push:
+    paths: ['projeto/**', '.github/workflows/trojan.yml']
+  pull_request:
+    paths: ['projeto/**', '.github/workflows/trojan.yml']
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: projeto
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: projeto/requirements-lock.txt
+      - run: python -m pip install -r requirements-lock.txt
+      - run: python -m pytest -q -k "not backends"
+      - run: python predict.py examples/fluxos_sem_rotulo.csv --saida reports/scores_ci.csv
