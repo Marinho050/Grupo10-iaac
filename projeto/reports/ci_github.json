@@ -1,0 +1,12 @@
+{
+  "run_id": 37637195526,
+  "status": "completed",
+  "conclusion": "success",
+  "code_commit": "e3d4823a529a4741910151d92a8401174d95ae39",
+  "url": "https://github.com/Marinho050/Grupo10-iaac/actions/runs/37637195526",
+  "checks": [
+    "Instalação em Ubuntu com Python 3.12 e requirements-lock.txt",
+    "Testes centrais sem o backend opcional LangGraph",
+    "CLI de inferência com modelo serializado"
+  ]
+}
