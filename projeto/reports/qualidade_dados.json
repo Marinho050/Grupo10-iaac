@@ -1,0 +1,38 @@
+{
+  "linhas": 177482,
+  "colunas": 86,
+  "classes": {
+    "Trojan": 90683,
+    "Benign": 86799
+  },
+  "valores_em_falta": 0,
+  "valores_infinitos": 0,
+  "duplicados_sem_indice": 0,
+  "colunas_constantes": [
+    "Bwd PSH Flags",
+    "Fwd URG Flags",
+    "Bwd URG Flags",
+    "RST Flag Count",
+    "CWE Flag Count",
+    "ECE Flag Count",
+    "Fwd Avg Bytes/Bulk",
+    "Fwd Avg Packets/Bulk",
+    "Fwd Avg Bulk Rate",
+    "Bwd Avg Bytes/Bulk",
+    "Bwd Avg Packets/Bulk",
+    "Bwd Avg Bulk Rate"
+  ],
+  "grupos_assinatura_com_rotulos_distintos": 0,
+  "linhas_nesses_grupos": 0,
+  "definicao_assinatura": "Todas as colunas exceto Class, Timestamp e índice. Repetição de tráfego não prova erro de rótulo.",
+  "grupos_features_com_rotulos_distintos": 650,
+  "linhas_nesses_grupos_features": 3331,
+  "teto_exatidao_empirico_features_identicas": 0.9945966351517337,
+  "nota_assinatura_features": "Hash das estatísticas transformadas sem IPs e Timestamp. Contextos distintos podem ter features idênticas; teto descritivo deste ficheiro, não limite populacional.",
+  "dias": 10,
+  "inicio": "2017-06-30",
+  "fim": "2017-07-17",
+  "temporal_viavel_para_fpr": false,
+  "motivo_temporal": "Dias recentes contêm apenas Trojan; sem negativos, FPR e ROC AUC não são estimáveis.",
+  "sha256": "3c889099fd12564b670fc3eab42cf9b76923c326350f0dd685f2b066e8ea501a"
+}

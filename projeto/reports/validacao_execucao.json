@@ -1,0 +1,15 @@
+{
+  "data": "2026-10-07",
+  "testes": 19,
+  "falhas": 0,
+  "erros": 0,
+  "ignorados": 0,
+  "notebook_celulas_codigo": 6,
+  "notebook_erros": 0,
+  "agentes_python_e_langgraph": "Executados com Qwen local; factos equivalentes.",
+  "api_http": "GET /health, /, /schema e POST /predict validados. Fluxo real pontuado pela interface.",
+  "cli": "5 fluxos sem Class pontuados; 1 alerta para revisão.",
+  "dependencias": "pip check sem conflitos. Locks separados para API e LLM.",
+  "docker": "Não executado: Docker não instalado.",
+  "ci_github": "Configurada; confirmar execução após push."
+}
