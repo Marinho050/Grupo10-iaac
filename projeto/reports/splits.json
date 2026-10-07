@@ -1,0 +1,26 @@
+{
+  "seed": 42,
+  "metodo": "GroupShuffleSplit por Source IP; 25% dos grupos para teste e 25% dos restantes para validação",
+  "sobreposicao_source_ip": 0,
+  "conjuntos": {
+    "treino": {
+      "n": 60693,
+      "benign": 12858,
+      "trojan": 47835,
+      "ips": 1008
+    },
+    "validacao": {
+      "n": 111185,
+      "benign": 71013,
+      "trojan": 40172,
+      "ips": 337
+    },
+    "teste": {
+      "n": 5604,
+      "benign": 2928,
+      "trojan": 2676,
+      "ips": 449
+    }
+  },
+  "limite": "IP de destino e assinaturas de fluxo podem repetir; não prova generalização a todas as entidades."
+}

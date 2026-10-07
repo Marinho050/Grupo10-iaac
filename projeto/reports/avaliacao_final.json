@@ -1,0 +1,106 @@
+{
+  "modelo": "hgb",
+  "limiar": 0.9275683468476112,
+  "validacao": {
+    "n": 111185,
+    "trojan": 40172,
+    "limiar": 0.9275683468476112,
+    "auc_roc": 0.5924268155345964,
+    "auc_pr": 0.47176841677941217,
+    "exatidao": 0.6512299320951567,
+    "recall": 0.12307079557901025,
+    "precisao": 0.5820579232399341,
+    "f1": 0.2031808654913081,
+    "fpr": 0.04999084674637038,
+    "tn": 67463,
+    "fp": 3550,
+    "fn": 35228,
+    "tp": 4944,
+    "brier": 0.4168153564122904,
+    "alertas": 8494
+  },
+  "teste": {
+    "n": 5604,
+    "trojan": 2676,
+    "limiar": 0.9275683468476112,
+    "auc_roc": 0.6424964596249192,
+    "auc_pr": 0.546442527348648,
+    "exatidao": 0.5208779443254818,
+    "recall": 0.042974588938714496,
+    "precisao": 0.4811715481171548,
+    "f1": 0.07890222984562607,
+    "fpr": 0.04234972677595628,
+    "tn": 2804,
+    "fp": 124,
+    "fn": 2561,
+    "tp": 115,
+    "brier": 0.2549146293857012,
+    "alertas": 239
+  },
+  "baseline_teste": {
+    "n": 5604,
+    "trojan": 2676,
+    "limiar": 0.5,
+    "auc_roc": 0.5,
+    "auc_pr": 0.47751605995717344,
+    "exatidao": 0.47751605995717344,
+    "recall": 1.0,
+    "precisao": 0.47751605995717344,
+    "f1": 0.6463768115942029,
+    "fpr": 1.0,
+    "tn": 0,
+    "fp": 2928,
+    "fn": 0,
+    "tp": 2676,
+    "brier": 0.3459859932556881,
+    "alertas": 5604
+  },
+  "auc_bootstrap_grupos": {
+    "ci95": [
+      0.5315433303200428,
+      0.767551565897423
+    ],
+    "replicacoes_validas": 300,
+    "unidade": "Source IP",
+    "n_grupos": 449
+  },
+  "diagnostico_aleatorio_hgb": {
+    "n": 44371,
+    "trojan": 22671,
+    "limiar": 0.5,
+    "auc_roc": 0.753659155091047,
+    "auc_pr": 0.7790785558272341,
+    "exatidao": 0.675756687926799,
+    "recall": 0.6471262846808699,
+    "precisao": 0.6966948428150822,
+    "f1": 0.6709963639689909,
+    "fpr": 0.29433179723502306,
+    "tn": 15313,
+    "fp": 6387,
+    "fn": 8000,
+    "tp": 14671,
+    "brier": 0.20168522929500635,
+    "alertas": 21058
+  },
+  "criterio_original": {
+    "recall_min": 0.9,
+    "fpr_max": 0.05,
+    "atingido_no_teste": false
+  },
+  "alertas_por_dia_projetados": 756.92715917202,
+  "dias_teste": 10,
+  "latencia_ms": {
+    "media": 88.59735100122634,
+    "p95": 97.67928998335265,
+    "n": 100,
+    "inclui": "transformação de estatísticas CSV, imputação, inferência e limiar; não captura PCAP"
+  },
+  "dataset_sha256": "3c889099fd12564b670fc3eab42cf9b76923c326350f0dd685f2b066e8ea501a",
+  "versoes": {
+    "python": "3.12.14",
+    "sklearn": "1.7.2",
+    "pandas": "2.3.3",
+    "numpy": "2.5.3"
+  },
+  "politica": "Demonstração local e revisão manual; nunca bloqueia tráfego automaticamente."
+}

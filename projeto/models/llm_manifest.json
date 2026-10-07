@@ -1,0 +1,7 @@
+{
+  "repo_id": "Qwen/Qwen2.5-0.5B-Instruct",
+  "revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+  "license": "Apache-2.0",
+  "local_directory": "models/llm",
+  "training": "Modelo pré-treinado pelos autores; não afinado neste projeto."
+}
