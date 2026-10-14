@@ -1,0 +1,8 @@
+numpy
+pandas
+fastapi
+pydantic
+uvicorn
+catboost
+PyYAML
+loguru
