@@ -54,7 +54,7 @@ Os pesos generativos têm cerca de 1 GB e ficam fora do Git e do ZIP. O manifest
 - [Model card](models/MODEL_CARD.md), modelos em models/ e evidências em reports/.
 - [Guião do relatório académico](docs/relatorio_academico_guiao.md), que precisa de autoria do grupo e do template do professor.
 
-O código FastAPI de exemplo existente no repositório do grupo foi preservado na raiz e não é a API desta componente. A CI desta componente executa apenas projeto/tests.
+O exemplo FastAPI de outro problema foi retirado desta branch em 14 de outubro de 2026 após criar uma cópia de segurança. Este repositório apresenta agora apenas a componente Trojan. A CI executa projeto/tests.
 
 O Dockerfile desta pasta empacota a API Trojan. Docker não está instalado nesta máquina; a imagem ainda precisa de um build numa máquina com Docker. Não foi feito deployment público.
 

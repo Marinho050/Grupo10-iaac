@@ -36,3 +36,7 @@ A inferência exigia Class; a imputação usava a mediana do lote e era calculad
 ## Pendências externas
 
 O grupo deve fornecer os restantes datasets, validar a escolha com o professor, identificar os outros elementos, preencher reuniões reais, aplicar os templates do Classroom e redigir o relatório académico de 25 a 30 páginas. A defesa individual de 5 a 7 minutos é uma atividade do aluno. Nenhuma reunião, aprovação, contribuição ou execução inexistente é marcada como feita.
+
+## Organização da pasta em 14 de outubro de 2026
+
+O exemplo de classificação de cancro da mama foi guardado numa cópia de segurança e retirado da branch Márcio. O projeto Trojan mantém-se em projeto/, com os mesmos caminhos e ambiente. A pasta notebooks da raiz e os ficheiros Docker e requirements da raiz pertenciam ao exemplo antigo; os equivalentes dentro de projeto/ foram preservados.
