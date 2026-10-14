@@ -1,0 +1,8 @@
+# Dependências para correr os notebooks localmente (VS Code / Jupyter)
+numpy
+pandas
+scikit-learn
+matplotlib
+openpyxl
+ipykernel
+jupyter
