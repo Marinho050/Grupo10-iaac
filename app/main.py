@@ -1,42 +1,52 @@
 import uuid
 import joblib
 import pandas as pd
-from fastapi import FastAPI
-from pydantic import BaseModel
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel, Field
 
-# Inicializar a aplicação FastAPI
-app = FastAPI(title="Phishing Detection API", version="1.0")
+# Inicialização com metadados claros
+app = FastAPI(title="Phishing Detection API", version="1.1")
 
-# Carregar o modelo treinado de Random Forest
-# (Garante que o ficheiro .pkl está acessível no diretório correto)
-model = joblib.load('random_forest_phishing.pkl')
+# Carregamento seguro do modelo
+try:
+    model = joblib.load('random_forest_phishing.pkl')
+except FileNotFoundError:
+    model = None
+    print("Aviso: Modelo 'random_forest_phishing.pkl' não encontrado.")
 
-# Definir a estrutura dos dados de entrada baseada nas caraterísticas reais do e-mail
+# Esquema de dados com validação de limites (Segurança)
 class EmailInput(BaseModel):
-    has_link: int
-    has_attachment: int
-    urgency_score: int
-    spelling_errors: int
-    email_length_words: int
+    has_link: int = Field(..., ge=0, le=1, description="0 (Não) ou 1 (Sim)")
+    has_attachment: int = Field(..., ge=0, le=1, description="0 (Não) ou 1 (Sim)")
+    urgency_score: int = Field(..., ge=0, le=10, description="Escala de urgência de 0 a 10")
+    spelling_errors: int = Field(..., ge=0, description="Número total de erros ortográficos")
+    email_length_words: int = Field(..., gt=0, description="Número de palavras (> 0)")
 
 @app.get("/")
-def home():
-    return {"message": "API de Deteção de Phishing a funcionar com sucesso!"}
+def health_check():
+    """
+    Endpoint de verificação de estado da API.
+    Retorna uma mensagem simples para confirmar que o servidor Uvicorn está online.
+    """
+    return {"status": "online", "message": "API de Deteção de Phishing operacional."}
 
 @app.post("/predict")
 def predict(data: EmailInput):
-    # Converter os dados recebidos para um DataFrame do Pandas
-    input_data = pd.DataFrame([data.dict()])
+    """
+    Recebe as 5 métricas de um e-mail validadas pelo Pydantic,
+    transforma-as num DataFrame e utiliza o modelo Random Forest 
+    para prever a probabilidade de ser phishing.
+    """
+    if model is None:
+        raise HTTPException(status_code=500, detail="Modelo não disponível no servidor.")
     
-    # Executar a previsão e calcular a probabilidade
+    input_data = pd.DataFrame([data.model_dump()])
+    
     prediction = int(model.predict(input_data)[0])
-    prediction_prob = float(model.predict_proba(input_data)[0][1])
-    
-    # Gerar um ID único para o registo da predição
-    prediction_id = str(uuid.uuid4())
+    prediction_prob = round(float(model.predict_proba(input_data)[0][1]), 4)
     
     return {
-        "prediction_Id": prediction_id,
-        "predict": prediction,
-        "predict_prob": prediction_prob
+        "prediction_id": str(uuid.uuid4()),
+        "is_phishing": bool(prediction),
+        "phishing_probability": prediction_prob
     }
