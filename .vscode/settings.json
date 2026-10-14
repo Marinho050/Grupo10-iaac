@@ -1,0 +1,23 @@
+{
+  "python.defaultInterpreterPath": "${workspaceFolder}/projeto/.venv/Scripts/python.exe",
+  "python.testing.pytestEnabled": true,
+  "python.testing.pytestArgs": [
+    "projeto/tests"
+  ],
+  "python.testing.unittestEnabled": false,
+  "python-envs.pythonProjects": [
+    {
+      "path": "projeto",
+      "envManager": "ms-python.python:venv",
+      "packageManager": "ms-python.python:pip"
+    }
+  ],
+  "jupyter.notebookFileRoot": "${workspaceFolder}/projeto",
+  "files.exclude": {
+    "**/__pycache__": true,
+    "**/.pytest_cache": true,
+    "**/.ipynb_checkpoints": true,
+    "**/.venv": true,
+    "**/.hf_cache": true
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "1 Analisar dados",
+      "type": "process",
+      "command": "${workspaceFolder}/projeto/.venv/Scripts/python.exe",
+      "args": [
+        "-m",
+        "src.eda"
+      ],
+      "problemMatcher": [],
+      "options": {
+        "cwd": "${workspaceFolder}/projeto"
+      }
+    },
+    {
+      "label": "2 Treinar e avaliar",
+      "type": "process",
+      "command": "${workspaceFolder}/projeto/.venv/Scripts/python.exe",
+      "args": [
+        "-m",
+        "src.modelacao"
+      ],
+      "problemMatcher": [],
+      "options": {
+        "cwd": "${workspaceFolder}/projeto"
+      }
+    },
+    {
+      "label": "3 Testar",
+      "type": "process",
+      "command": "${workspaceFolder}/projeto/.venv/Scripts/python.exe",
+      "args": [
+        "-m",
+        "pytest",
+        "-q"
+      ],
+      "problemMatcher": [],
+      "options": {
+        "cwd": "${workspaceFolder}/projeto"
+      }
+    },
+    {
+      "label": "4 Abrir API local",
+      "type": "process",
+      "command": "${workspaceFolder}/projeto/.venv/Scripts/python.exe",
+      "args": [
+        "-m",
+        "uvicorn",
+        "api:app",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "8000"
+      ],
+      "problemMatcher": [],
+      "options": {
+        "cwd": "${workspaceFolder}/projeto"
+      }
+    }
+  ]
+}

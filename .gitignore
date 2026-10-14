@@ -1,4 +1,4 @@
-# Ambientes e ficheiros locais
+# Ambientes e caches
 .venv/
 venv/
 .env
@@ -8,3 +8,12 @@ __pycache__/
 .ipynb_checkpoints/
 *.log
 .DS_Store
+
+# Dados, pesos generativos e ficheiros locais
+projeto/data/*.csv
+projeto/data/*.pkl
+projeto/models/llm/
+projeto/.hf_cache/
+projeto/.jupyter/
+projeto/outputs/
+projeto/reports/predictions_*.csv

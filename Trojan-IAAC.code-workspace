@@ -1,1 +1,9 @@
-{"folders":[{"name":"Trojan IAAC","path":"projeto"}],"settings":{}}
+{
+  "folders": [
+    {
+      "name": "Trojan IAAC",
+      "path": "."
+    }
+  ],
+  "settings": {}
+}

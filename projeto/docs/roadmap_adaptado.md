@@ -40,3 +40,7 @@ O grupo deve fornecer os restantes datasets, validar a escolha com o professor, 
 ## Organização da pasta em 14 de outubro de 2026
 
 O exemplo de classificação de cancro da mama foi guardado numa cópia de segurança e retirado da branch Márcio. O projeto Trojan mantém-se em projeto/, com os mesmos caminhos e ambiente. A pasta notebooks da raiz e os ficheiros Docker e requirements da raiz pertenciam ao exemplo antigo; os equivalentes dentro de projeto/ foram preservados.
+
+## Entrada única do projeto
+
+O README principal encontra-se apenas na raiz do repositório. Abra Trojan-IAAC.code-workspace, que mostra a raiz completa. A configuração do VS Code está em .vscode/ e os módulos continuam em projeto/src/. Os resultados atuais estão em projeto/reports/; as experiências antigas e o workspace redundante foram guardados fora da pasta de trabalho.

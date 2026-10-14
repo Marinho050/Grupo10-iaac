@@ -1,9 +1,9 @@
 name: Trojan pipeline
 on:
   push:
-    paths: ['projeto/**', '.github/workflows/trojan.yml']
+    paths: ['projeto/**', '.vscode/**', 'README.md', 'Trojan-IAAC.code-workspace', '.github/workflows/trojan.yml']
   pull_request:
-    paths: ['projeto/**', '.github/workflows/trojan.yml']
+    paths: ['projeto/**', '.vscode/**', 'README.md', 'Trojan-IAAC.code-workspace', '.github/workflows/trojan.yml']
 jobs:
   test:
     runs-on: ubuntu-latest
