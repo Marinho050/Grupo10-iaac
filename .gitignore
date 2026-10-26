@@ -1,0 +1,24 @@
+# Ambientes Virtuais
+venv/
+env/
+.env
+
+# Caches de Python e Compilados
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# Ficheiros de Sistema Operativo
+.DS_Store
+Thumbs.db
+
+# Dados Brutos e Logs
+*.log
+data/
+datasets/
+*.csv
+
+# Modelos de Machine Learning (Descomenta a linha abaixo se o ficheiro .pkl for maior que 100MB)
+# *.pkl
